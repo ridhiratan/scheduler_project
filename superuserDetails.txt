@@ -1,0 +1,6 @@
+name : ridhi
+email : ridhi@gmail.com
+password : ridhi
+
+name : sampleUser1
+password : kunjika1
