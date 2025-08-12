@@ -1,0 +1,11 @@
+Method1:
+for running inside virtual environment:
+.\.venv\Scripts\Activate.ps1
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+
+Method2:
+for running inside docker container:
+docker build -t event-scheduler .
+docker run -p 8000:8000 event-scheduler

@@ -31,7 +31,7 @@ The application supports user signup, login, event creation, reservation, and ca
 
 ### 1. Project Structure
 
-Place the files in the following structure:
+Given is the structure of our django scheduler project
 
 scheduler_project/
 ├─ scheduler_project/
@@ -52,7 +52,7 @@ scheduler_project/
 
 ### 2. Create and activate a virtual environment
 
-Windows (PowerShell):
+For Windows (PowerShell):
 python -m venv .venv
 ..venv\Scripts\Activate.ps1
 
@@ -69,31 +69,19 @@ Edit
 python manage.py makemigrations
 python manage.py migrate
 
-pgsql
-Copy
-Edit
-
-### 5. Create a superuser (optional, for admin access)
+### 5. Create a superuser (optional, for admin access) (Note: superuse already exists in dockerFile, no need to create everytime)
 
 python manage.py createsuperuser
-
-less
-Copy
-Edit
 
 Enter the username, email, and password when prompted.
 
 ### 6. Load sample data (optional)
 
 This will create:
-- A user: `sample_creator` with password `password123`
+- A user: "sample_creator" with password "password123"
 - Four sample events: Workshop, Sports, Literature, Arts
 
 python manage.py create_sample_events
-
-yaml
-Copy
-Edit
 
 ---
 
@@ -101,16 +89,8 @@ Edit
 
 python manage.py runserver
 
-sql
-Copy
-Edit
-
 The server will start at:
 http://127.0.0.1:8000/
-
-yaml
-Copy
-Edit
 
 ---
 
@@ -122,14 +102,10 @@ This project uses Token Authentication.
 
 Send a POST request to `/api/signup/` with:
 {
-"username": "alice",
-"password": "pass123",
-"email": "alice@example.com"
+"username": "ridhi",
+"password": "ridhi",
+"email": "ridhi@gmail.com"
 }
-
-css
-Copy
-Edit
 
 You will receive a token in the response.
 
@@ -142,10 +118,6 @@ You will get a token for that user.
 
 Include the token in the request header:
 Authorization: Token your_token_here
-
-yaml
-Copy
-Edit
 
 ---
 
@@ -172,9 +144,5 @@ Edit
 To run all tests:
 
 python manage.py test
-
-pgsql
-Copy
-Edit
 
 Tests include concurrency checks to ensure overbooking is prevented.
