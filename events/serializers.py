@@ -7,12 +7,13 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email']
+        fields = ['id', 'username', 'email', 'password']
 
 class EventSerializer(serializers.ModelSerializer):
     creator = UserSerializer(read_only=True)
     available_slots = serializers.SerializerMethodField()
 
+    # class meta : Ye batata hai ki is model/serializer ke liye extra rules/configuration kya hai.
     class Meta:
         model = Event
         fields = ['id','title','description','category','start_time','end_time',
