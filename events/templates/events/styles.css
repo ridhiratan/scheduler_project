@@ -1,0 +1,19 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('/static/events/bg.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 30px;
+    border-radius: 10px;
+}

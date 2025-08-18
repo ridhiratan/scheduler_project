@@ -39,31 +39,32 @@ class EventViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
 
-    @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
+    @action(detail=True, methods=['get','post'], permission_classes=[permissions.IsAuthenticated])
     def reserve(self, request, pk=None):
-        """
-        Reserve a slot for the current user on this event.
-        Uses a DB transaction and select_for_update to prevent race conditions.
-        """
         event = get_object_or_404(Event, pk=pk)
-        # Wrap in a transaction to make this operation atomic
-        with transaction.atomic():
-            # Lock the event row (works with PostgreSQL; SQLite behavior is coarse-grained)
-            locked_event = Event.objects.select_for_update().get(pk=event.pk)
+        if request.method == 'POST':
+            # Wrap in a transaction to make this operation atomic
+            with transaction.atomic():
+                # Lock the event row
+                locked_event = Event.objects.select_for_update().get(pk=event.pk)
 
-            # prevent duplicate reservation
-            already = Reservation.objects.filter(event=locked_event, user=request.user, cancelled=False).exists()
-            if already:
-                return Response({'detail': 'You already reserved this event'}, status=status.HTTP_400_BAD_REQUEST)
+                # prevent duplicate reservation
+                already = Reservation.objects.filter(event=locked_event, user=request.user, cancelled=False).exists()
+                if already:
+                    return Response({'detail': 'You already reserved this event'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # check capacity
-            current = locked_event.reservations.filter(cancelled=False).count()
-            if current >= locked_event.capacity:
-                return Response({'detail': 'Event is full'}, status=status.HTTP_400_BAD_REQUEST)
+                # check capacity
+                current = locked_event.reservations.filter(cancelled=False).count()
+                if current >= locked_event.capacity:
+                    return Response({'detail': 'Event is full'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # all good -> create reservation
-            reservation = Reservation.objects.create(event=locked_event, user=request.user)
-            return Response(ReservationSerializer(reservation).data, status=status.HTTP_201_CREATED)
+                # all good -> create reservation
+                reservation = Reservation.objects.create(event=locked_event, user=request.user)
+                return Response(ReservationSerializer(reservation).data, status=status.HTTP_201_CREATED)
+        else:
+            # GET request → show a dummy form in browsable API
+            return Response({"detail": "Click POST to reserve this event"})
+
 
     @action(detail=True, methods=['get'], permission_classes=[permissions.IsAuthenticated])
     def reservations(self, request, pk=None):

@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponse
+from django.shortcuts import render
 
 def home(request):
-    return HttpResponse("Welcome to the Event Scheduler API. Visit /api/events/ for the event list.")
+    return render(request, 'events/home.html')
 
 urlpatterns = [
     path('', home),  # now root URL works
